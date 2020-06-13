@@ -115,7 +115,6 @@ class DynamixelController
 
   void initPublisher(void);
   void initSubscriber(void);
-
   void initServer();
 
   void readCallback(const ros::TimerEvent&);

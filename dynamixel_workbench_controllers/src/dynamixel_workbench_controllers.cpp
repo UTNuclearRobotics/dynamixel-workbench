@@ -561,8 +561,16 @@ void DynamixelController::commandVelocityCallback(const geometry_msgs::Twist::Co
     else if (wheel_velocity[LEFT] > 0.0f) dynamixel_velocity[LEFT] = (wheel_velocity[LEFT] * velocity_constant_value);
 
     if (wheel_velocity[RIGHT] == 0.0f) dynamixel_velocity[RIGHT] = 0;
-    else if (wheel_velocity[RIGHT] < 0.0f)  dynamixel_velocity[RIGHT] = ((-1.0f) * wheel_velocity[RIGHT] * velocity_constant_value) + 1023;
-    else if (wheel_velocity[RIGHT] > 0.0f)  dynamixel_velocity[RIGHT] = (wheel_velocity[RIGHT] * velocity_constant_value);
+    // swapped out expressions expresions for dynamixel_velocity below.
+    // also added a -1 int multiplier for if < 0
+    // also took away (-1.0f) multiplier for if > 0 (where 1023 is added)
+    else if (wheel_velocity[RIGHT] < 0.0f)  dynamixel_velocity[RIGHT] = -1*(wheel_velocity[RIGHT] * velocity_constant_value);
+    else if (wheel_velocity[RIGHT] > 0.0f)  dynamixel_velocity[RIGHT] = (wheel_velocity[RIGHT] * velocity_constant_value) + 1023;
+    // built-in debug print statements to show conversion from wheel_velocity to dynamixel_velocity
+    printf("\nLeft Wheel Velocity is %f", wheel_velocity[LEFT]);
+    printf("\nRight Wheel Velocity is %f", wheel_velocity[RIGHT]);
+    printf("\nLeft Dynamixel Velocity is %d", dynamixel_velocity[LEFT]);
+    printf("\nRight Dynamixel Velocity is %d", dynamixel_velocity[RIGHT]);
   }
 
   result = dxl_wb_->syncWrite(SYNC_WRITE_HANDLER_FOR_GOAL_VELOCITY, id_array, dynamixel_.size(), dynamixel_velocity, 1, &log);
@@ -571,6 +579,7 @@ void DynamixelController::commandVelocityCallback(const geometry_msgs::Twist::Co
     ROS_ERROR("%s", log);
   }
 }
+
 
 void DynamixelController::writeCallback(const ros::TimerEvent&)
 {
