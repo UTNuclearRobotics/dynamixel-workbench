@@ -1237,7 +1237,7 @@ int32_t DynamixelWorkbench::convertVelocity2Value(uint8_t id, float velocity)
         strncmp(getModelName(id), "MX", strlen("MX")) == 0)
     {
       if (velocity == 0.0f) value = 0;
-      else if (velocity < 0.0f) value = (velocity / (model_info->rpm * RPM2RADPERSEC));
+      else if (velocity < 0.0f) value = -1*(velocity / (model_info->rpm * RPM2RADPERSEC));
       else if (velocity > 0.0f) value = (velocity / (model_info->rpm * RPM2RADPERSEC)) + 1023;
 
       return value;
@@ -1248,7 +1248,7 @@ int32_t DynamixelWorkbench::convertVelocity2Value(uint8_t id, float velocity)
     if (strcmp(getModelName(id), "XL-320") == 0)
     {
       if (velocity == 0.0f) value = 0;
-      else if (velocity < 0.0f) value = (velocity / (model_info->rpm * RPM2RADPERSEC));
+      else if (velocity < 0.0f) value = -1*(velocity / (model_info->rpm * RPM2RADPERSEC));
       else if (velocity > 0.0f) value = (velocity / (model_info->rpm * RPM2RADPERSEC)) + 1023;
 
       return value;

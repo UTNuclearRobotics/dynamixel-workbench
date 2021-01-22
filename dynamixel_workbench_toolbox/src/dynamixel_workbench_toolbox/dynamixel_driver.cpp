@@ -352,7 +352,10 @@ bool DynamixelDriver::ping(uint8_t id, uint16_t *get_model_number, const char **
   }
   else
   {
-    setTool(model_number, id);
+    if (!setTool(model_number, id, log)) {
+        return false;
+    }
+
     if (get_model_number != NULL) *get_model_number = model_number;
     return true;
   }
@@ -371,7 +374,9 @@ bool DynamixelDriver::ping(uint8_t id, uint16_t *get_model_number, const char **
   }
   else
   {
-    setTool(model_number, id);
+    if (!setTool(model_number, id, log)) {
+        return false;
+    }
     if (get_model_number != NULL) *get_model_number = model_number;
     return true;
   }  
